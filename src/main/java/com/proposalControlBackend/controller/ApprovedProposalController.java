@@ -26,7 +26,7 @@ public class ApprovedProposalController {
     
     @PostMapping
     public ResponseEntity<?> createProposal(@RequestBody ApprovedProposal reqData) throws IOException{
-        System.out.println(":::  UserController.createUser ::::::" );
+        System.out.println(":::  UserController.createUser :::::::" );
         ResultDTO<?> responsePacket = null;
        
             try {
