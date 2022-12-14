@@ -97,9 +97,8 @@ public class ProposalController {
     
     @PostMapping
     public ResponseEntity<?> createProposal(@RequestBody Proposal reqData) throws IOException{
-        //System.out.println(":::  UserController.createUser :::" + reqData.getDateVersion());
         ResultDTO<?> responsePacket = null;
-        
+        try {
         int year = LocalDate.now().getYear();
         
         List<Proposal> list = new ArrayList<Proposal>(); 
@@ -112,26 +111,20 @@ public class ProposalController {
             while (j < list.size()) {             
             String[] parts = list.get(j).getCode().split("-");
             max = parts[1]; // 654321
-            
             j++;  
         }
-            
-        System.out.println("J" +j+ " code mayor" + max);  
         int number = Integer.parseInt(max) + 1;
-        //float  count = 0000;
-                System.out.println("number "+ number);
-                String.format("%04d", number);
-                System.out.println(number);
+        String format = String.format("%04d", number);
         String code = null;
-        if(list.isEmpty()){
+        
+        if(list.isEmpty() || "9999".equals(format)){
             code = year + "-" + 0000;
             reqData.setCode(code);
         }else{
-            code = year + "-" + number;
+            code = year + "-" + format;
             reqData.setCode(code);
         }
-        System.out.print("CODE" + code);
-         /*try {
+        
              responsePacket = new ResultDTO<>(proposalservice.createProposal(reqData), 
                      "Proposal Created Successfully", true);  
             return new ResponseEntity<>(responsePacket, HttpStatus.OK);
@@ -139,8 +132,7 @@ public class ProposalController {
             System.out.print("entra en catchh");
             responsePacket = new ResultDTO<>(e.getMessage(), false);
             return new ResponseEntity<>(responsePacket, HttpStatus.BAD_REQUEST);
-        }*/
-         return null;
+        }
     }
     
         
