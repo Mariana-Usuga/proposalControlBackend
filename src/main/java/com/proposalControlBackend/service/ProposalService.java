@@ -45,6 +45,10 @@ public class ProposalService {
         proposalrepo.deleteById(id);
         return null;
     }
+    
+    public Object getAllProposal(){
+        return proposalrepo.findAll();
+    } 
    
 }
 

@@ -13,6 +13,9 @@ import java.util.List;
 import java.nio.file.Files;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,7 +53,7 @@ public class ProposalController {
       return (List<Proposal>) proposalservice.getProposalByFilters(reqData, start, end);
     }
     
-      @PostMapping("/date")
+    @PostMapping("/date")
     public List<Proposal> getDateByFilters() throws ParseException, ParseException{
          System.out.println("entra");
         //System.out.println("entra" + startDate);
@@ -59,20 +62,6 @@ public class ProposalController {
         System.out.println("entra"+ start+ "end" + end);
       return (List<Proposal>) proposalservice.searchDate(start, end);
     }
-    
-    /*@PostMapping("/filter")
-    public List<Proposal> getProposalByFilters(@RequestBody Proposal reqData,
-            @RequestParam Date startDate, @RequestParam Date endDate){
-         System.out.println("entra" + reqData.getCompany());
-      return (List<Proposal>) proposalservice.getProposalByFilters(reqData, startDate, endDate);
-    }*/
-    
-    /*@GetMapping("/laptops/createdat")
-    public List<Proposal> getLaptopsByCreatedDate (@RequestParam Date startDate, 
-                @RequestParam Date endDate) {
-																
-            return List<Proposal> proposalservice.getFilterDate(startDate, endDate);
-	}*/
         
     @PostMapping("/upload")
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes attributes) throws IOException{
@@ -108,10 +97,41 @@ public class ProposalController {
     
     @PostMapping
     public ResponseEntity<?> createProposal(@RequestBody Proposal reqData) throws IOException{
-        System.out.println(":::  UserController.createUser :::" + reqData.getDateVersion());
+        //System.out.println(":::  UserController.createUser :::" + reqData.getDateVersion());
         ResultDTO<?> responsePacket = null;
+        
+        int year = LocalDate.now().getYear();
+        
+        List<Proposal> list = new ArrayList<Proposal>(); 
+        
+        list = (List<Proposal>) proposalservice.getAllProposal();
        
-            try {
+            int j = 0;
+            String max = null;
+            
+            while (j < list.size()) {             
+            String[] parts = list.get(j).getCode().split("-");
+            max = parts[1]; // 654321
+            
+            j++;  
+        }
+            
+        System.out.println("J" +j+ " code mayor" + max);  
+        int number = Integer.parseInt(max) + 1;
+        //float  count = 0000;
+                System.out.println("number "+ number);
+                String.format("%04d", number);
+                System.out.println(number);
+        String code = null;
+        if(list.isEmpty()){
+            code = year + "-" + 0000;
+            reqData.setCode(code);
+        }else{
+            code = year + "-" + number;
+            reqData.setCode(code);
+        }
+        System.out.print("CODE" + code);
+         /*try {
              responsePacket = new ResultDTO<>(proposalservice.createProposal(reqData), 
                      "Proposal Created Successfully", true);  
             return new ResponseEntity<>(responsePacket, HttpStatus.OK);
@@ -119,7 +139,8 @@ public class ProposalController {
             System.out.print("entra en catchh");
             responsePacket = new ResultDTO<>(e.getMessage(), false);
             return new ResponseEntity<>(responsePacket, HttpStatus.BAD_REQUEST);
-        }
+        }*/
+         return null;
     }
     
         
@@ -164,97 +185,10 @@ public class ProposalController {
         }
      
     }
- 
-    
-    /*@GetMapping("/company")
-	public List<Proposal> getAllCompany(@PathVariable("id") Integer id) {
-            System.err.println(":::  UserController.getUserById ::::::");
-	return (List<Proposal>) proposalservice.getProposalsById(id);
-	}*/
   
 }
-/*
-package com.proposalControl.controller;
 
-import com.proposalControl.bean.ResultDTO;
-import com.proposalControl.entity.ProposedVersion;
-import com.proposalControl.service.ProposedVersionService;
-import java.io.IOException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping("/proposalVersion")
-public class proposedVersionController {
-    
-    @Autowired
-    private ProposedVersionService proposedVersionService ;  
-    
-    @PostMapping
-    public ResponseEntity<?> createProposal(@RequestBody ProposedVersion reqData) throws IOException{
-        System.out.println(":::  UserController.createUser :::" + reqData.getYearP());
-        ResultDTO<?> responsePacket = null;
-                 
-        try {
-            responsePacket = new ResultDTO<>(proposedVersionService .createNewVersion(reqData), "Proposal Created Successfully", true);  
-            return new ResponseEntity<>(responsePacket, HttpStatus.OK);
-        } catch (Exception e) {
-            System.out.print("entra en catchh");
-            responsePacket = new ResultDTO<>(e.getMessage(), false);
-            return new ResponseEntity<>(responsePacket, HttpStatus.BAD_REQUEST);
-        }
-    }
-    
-}
 
-*/
-
- /*}else{
-            try {
-                System.out.println("!= 1" + reqData.getVersion());
-            var ver = reqData.getVersion() + 1;
-            Proposal pro = new Proposal(reqData.getCompany(), reqData.getCustomer(),
-                    reqData.getCustomerReference(), reqData.getYearP(), 
-                    reqData.getMonthP(), 1, reqData.getDateVersion(),
-                    reqData.getServicioConcept(), reqData.getTypeOfService(), 
-                    reqData.getCurrency(),reqData.getBaseAmount(), 
-                    reqData.getTotalAmount(), reqData.getStateP(), 
-                    reqData.getWarranty(), reqData.getFolder(), reqData.getProposalId());
-            
-            //Eliminar la anterior
-            //proposalservice.delete(pro.getProposalId());
-            
-            ProposalVersion proVersion = new ProposalVersion(reqData.getCompany(), reqData.getCustomer(),
-                    reqData.getCustomerReference(), reqData.getYearP(), 
-                    reqData.getMonthP(), ver, reqData.getDateVersion(),
-                    reqData.getServicioConcept(), reqData.getTypeOfService(), 
-                    reqData.getCurrency(),reqData.getBaseAmount(), 
-                    reqData.getTotalAmount(), reqData.getStateP(), 
-                    reqData.getWarranty(), reqData.getFolder(), reqData.getProposalId());
-
-            
-            //List<ProposalVersion> versiones = new ArrayList<>();
-            
-            //proVersion.setProposal(pro);
+          
        
-            //versiones.add(proVersion);
-            
-            //pro.setProposalVersion(versiones);
-            
-            //proposalrepo.save(pro);
-            proposalVersionservice.createProposal(proVersion);
-            responsePacket = new ResultDTO<>(proposalrepo.save(pro), 
-                    "Proposal Created Successfully", true);  
-            return new ResponseEntity<>(responsePacket, HttpStatus.OK);
-            }catch (Exception e){
-                 System.out.print("entra en catchh");
-            responsePacket = new ResultDTO<>(e.getMessage(), false);
-            return new ResponseEntity<>(responsePacket, HttpStatus.BAD_REQUEST);
-            }*/
