@@ -35,14 +35,16 @@ public class ProposalVersion {
     private String creatorUser;
     private String folder;
     private String editorUser;
+    private String comments;
+    private String innerDuoCommercial;
+    private String innerDuoPresale;
+    private Date proposalSubmissionDeadline;
     
     public ProposalVersion() {}
 
-    public ProposalVersion(Long id,String company, String customer, String customerReference, 
-            Integer version, Date dateVersion, String servicioConcept, String typeOfService, 
-            String currency, Integer baseAmount, Integer totalAmount, String stateP, 
-            String folder, Long proposalId) {
-        this.id = id;
+    public ProposalVersion(String code, long proposalId, String company, String customer, String customerReference, Integer version, Date dateVersion, String servicioConcept, String typeOfService, String currency, Integer baseAmount, Integer totalAmount, String stateP, String wayToPay, String wayToPayDays, String creatorUser, String folder, String editorUser, String comments, String innerDuoCommercial, String innerDuoPresale) {
+        this.code = code;
+        this.proposalId = proposalId;
         this.company = company;
         this.customer = customer;
         this.customerReference = customerReference;
@@ -54,9 +56,57 @@ public class ProposalVersion {
         this.baseAmount = baseAmount;
         this.totalAmount = totalAmount;
         this.stateP = stateP;
+        this.wayToPay = wayToPay;
+        this.wayToPayDays = wayToPayDays;
+        this.creatorUser = creatorUser;
         this.folder = folder;
-        this.proposalId = proposalId;
+        this.editorUser = editorUser;
+        this.comments = comments;
+        this.innerDuoCommercial = innerDuoCommercial;
+        this.innerDuoPresale = innerDuoPresale;
     }
+
+    public Date getProposalSubmissionDeadline() {
+        return proposalSubmissionDeadline;
+    }
+
+    public void setProposalSubmissionDeadline(Date proposalSubmissionDeadline) {
+        this.proposalSubmissionDeadline = proposalSubmissionDeadline;
+    }
+    
+    public String getEditorUser() {
+        return editorUser;
+    }
+
+    public void setEditorUser(String editorUser) {
+        this.editorUser = editorUser;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
+    public String getInnerDuoCommercial() {
+        return innerDuoCommercial;
+    }
+
+    public void setInnerDuoCommercial(String innerDuoCommercial) {
+        this.innerDuoCommercial = innerDuoCommercial;
+    }
+
+    public String getInnerDuoPresale() {
+        return innerDuoPresale;
+    }
+
+    public void setInnerDuoPresale(String innerDuoPresale) {
+        this.innerDuoPresale = innerDuoPresale;
+    }
+    
+    
     
     public String getCode() {
         return code;

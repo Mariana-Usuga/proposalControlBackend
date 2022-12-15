@@ -38,13 +38,15 @@ public class Proposal {
     //@Temporal(javax.persistence.TemporalType.DATE)
     private Date rejectionDate;
     private String rejectionComments;
+    private String comments;
+    private String innerDuoCommercial;
+    private String innerDuoPresale;
+    private Date proposalSubmissionDeadline;
     
     public Proposal(){ }
 
-    public Proposal(Long id, String company, String customer, String customerReference, 
-            Integer version, Date dateVersion, String servicioConcept, String typeOfService, String currency, 
-            Integer baseAmount, Integer totalAmount, String stateP,String folder) {
-        this.id = id;
+    public Proposal(String code, String company, String customer, String customerReference, Integer version, Date dateVersion, String servicioConcept, String typeOfService, String currency, Integer baseAmount, Integer totalAmount, String stateP, String wayToPay, Integer wayToPayDays, String creatorUser, String folder, String editorUser, String rejectionUser, Date rejectionDate, String comments, String reasonForRejection, Date proposalSubmissionDate, Date dateOfDelivery, String innerDuoCommercial, String innerDuoPresale) {
+        this.code = code;
         this.company = company;
         this.customer = customer;
         this.customerReference = customerReference;
@@ -56,9 +58,61 @@ public class Proposal {
         this.baseAmount = baseAmount;
         this.totalAmount = totalAmount;
         this.stateP = stateP;
+        this.wayToPay = wayToPay;
+        this.wayToPayDays = wayToPayDays;
+        this.creatorUser = creatorUser;
         this.folder = folder;
-        //this.proposalVersion = proposalVersion;
+        this.editorUser = editorUser;
+        this.rejectionUser = rejectionUser;
+        this.rejectionDate = rejectionDate;
+        this.comments = comments;
+        this.innerDuoCommercial = innerDuoCommercial;
+        this.innerDuoPresale = innerDuoPresale;
     }
+
+    public String getRejectionComments() {
+        return rejectionComments;
+    }
+
+    public void setRejectionComments(String rejectionComments) {
+        this.rejectionComments = rejectionComments;
+    }
+
+    public Date getProposalSubmissionDeadline() {
+        return proposalSubmissionDeadline;
+    }
+
+    public void setProposalSubmissionDeadline(Date proposalSubmissionDeadline) {
+        this.proposalSubmissionDeadline = proposalSubmissionDeadline;
+    }
+
+    
+    
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
+    public String getInnerDuoCommercial() {
+        return innerDuoCommercial;
+    }
+
+    public void setInnerDuoCommercial(String innerDuoCommercial) {
+        this.innerDuoCommercial = innerDuoCommercial;
+    }
+
+    public String getInnerDuoPresale() {
+        return innerDuoPresale;
+    }
+
+    public void setInnerDuoPresale(String innerDuoPresale) {
+        this.innerDuoPresale = innerDuoPresale;
+    }
+    
+    
     
     
 
@@ -69,19 +123,6 @@ public class Proposal {
     public void setRejectionUser(String rejectionUser) {
         this.rejectionUser = rejectionUser;
     }
-    
-    
-    
-
-    public String getRejectionComments() {
-        return rejectionComments;
-    }
-
-    public void setRejectionComments(String rejectionComments) {
-        this.rejectionComments = rejectionComments;
-    }
-    
-    
 
     public Date getRejectionDate() {
         return rejectionDate;
@@ -244,12 +285,4 @@ public class Proposal {
 
 
 }
-//@OneToMany(fetch = FetchType.LAZY, mappedBy = "proposal", cascade = CascadeType.ALL)
-    //private List<ProposalVersion> proposalVersion;
-    
-    /*public List<ProposedVersion> getProposedVersions() {
-    return proposedVersions;
-    }
-    public void setProposedVersions(List<ProposedVersion> proposedVersions) {
-    this.proposedVersions = proposedVersions;
-    }*/
+

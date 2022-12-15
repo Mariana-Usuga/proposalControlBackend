@@ -39,17 +39,20 @@ public class ApprovedProposal {
     private Date approvalDate;
     private String folder;
     private String comments;
+    private String commentsProposalApproved;
+    private String innerDuoCommercial;
+    private String innerDuoPresale;
     private String editorUser;
+    private Date proposalSubmissionDeadline;
         
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "approvedProposal", cascade = CascadeType.ALL)
     List<Hito> hitos;
      
      public ApprovedProposal() {}
-    
-    public ApprovedProposal(String company, String customer, String customerReference,
-            Integer version, Date dateVersion, String servicioConcept, String typeOfService, 
-            String currency, Integer baseAmount, Integer totalAmount, String stateP, 
-            String folder) {
+
+    public ApprovedProposal(Long proposalId, String code, String company, String customer, String customerReference, Integer version, Date dateVersion, String servicioConcept, String typeOfService, String currency, Integer baseAmount, Integer totalAmount, String stateP, String wayToPay, String wayToPayDays, String creatorUser, String userApproved, Date approvalDate, String folder, String comments, String commentsProposalApproved, String innerDuoCommercial, String innerDuoPresale, String editorUser, List<Hito> hitos) {
+        this.proposalId = proposalId;
+        this.code = code;
         this.company = company;
         this.customer = customer;
         this.customerReference = customerReference;
@@ -61,9 +64,53 @@ public class ApprovedProposal {
         this.baseAmount = baseAmount;
         this.totalAmount = totalAmount;
         this.stateP = stateP;
+        this.wayToPay = wayToPay;
+        this.wayToPayDays = wayToPayDays;
+        this.creatorUser = creatorUser;
+        this.userApproved = userApproved;
+        this.approvalDate = approvalDate;
         this.folder = folder;
-   
-     }
+        this.comments = comments;
+        this.commentsProposalApproved = commentsProposalApproved;
+        this.innerDuoCommercial = innerDuoCommercial;
+        this.innerDuoPresale = innerDuoPresale;
+        this.editorUser = editorUser;
+        this.hitos = hitos;
+    }
+
+    public Date getProposalSubmissionDeadline() {
+        return proposalSubmissionDeadline;
+    }
+
+    public void setProposalSubmissionDeadline(Date proposalSubmissionDeadline) {
+        this.proposalSubmissionDeadline = proposalSubmissionDeadline;
+    }
+
+    public String getCommentsProposalApproved() {
+        return commentsProposalApproved;
+    }
+
+    public void setCommentsProposalApproved(String commentsProposalApproved) {
+        this.commentsProposalApproved = commentsProposalApproved;
+    }
+
+    public String getInnerDuoCommercial() {
+        return innerDuoCommercial;
+    }
+
+    public void setInnerDuoCommercial(String innerDuoCommercial) {
+        this.innerDuoCommercial = innerDuoCommercial;
+    }
+
+    public String getInnerDuoPresale() {
+        return innerDuoPresale;
+    }
+
+    public void setInnerDuoPresale(String innerDuoPresale) {
+        this.innerDuoPresale = innerDuoPresale;
+    }
+    
+    
 
     public String getEditorUser() {
         return editorUser;
