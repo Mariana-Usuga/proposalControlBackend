@@ -36,6 +36,7 @@ public class Proposal {
     private String editorUser;
     private String rejectionUser;
     //@Temporal(javax.persistence.TemporalType.DATE)
+     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date rejectionDate;
     private String rejectionComments;
     private String comments;
@@ -45,7 +46,7 @@ public class Proposal {
     
     public Proposal(){ }
 
-    public Proposal(String code, String company, String customer, String customerReference, Integer version, Date dateVersion, String servicioConcept, String typeOfService, String currency, Integer baseAmount, Integer totalAmount, String stateP, String wayToPay, Integer wayToPayDays, String creatorUser, String folder, String editorUser, String rejectionUser, Date rejectionDate, String comments, String reasonForRejection, Date proposalSubmissionDate, Date dateOfDelivery, String innerDuoCommercial, String innerDuoPresale) {
+    public Proposal(String code, String company, String customer, String customerReference, Integer version, Date dateVersion, String servicioConcept, String typeOfService, String currency, Integer baseAmount, Integer totalAmount, String stateP, String wayToPay, Integer wayToPayDays, String creatorUser, String folder, String editorUser, String rejectionUser, Date rejectionDate, String rejectionComments, String comments, String innerDuoCommercial, String innerDuoPresale, Date proposalSubmissionDeadline) {
         this.code = code;
         this.company = company;
         this.customer = customer;
@@ -65,10 +66,15 @@ public class Proposal {
         this.editorUser = editorUser;
         this.rejectionUser = rejectionUser;
         this.rejectionDate = rejectionDate;
+        this.rejectionComments = rejectionComments;
         this.comments = comments;
         this.innerDuoCommercial = innerDuoCommercial;
         this.innerDuoPresale = innerDuoPresale;
+        this.proposalSubmissionDeadline = proposalSubmissionDeadline;
     }
+
+    
+    
 
     public String getRejectionComments() {
         return rejectionComments;

@@ -74,10 +74,11 @@ public class ProposalController {
         }
              System.out.println(":::  UserController.createUser :::" + file);
         StringBuilder builder = new StringBuilder();
-        builder.append(System.getProperty("user.home"));
+        //builder.append(System.getProperty("user.home"));
+        builder.append("C:\\Users\\Mariana\\Desktop\\dataProposal");
         builder.append(File.separator);
         //builder.append("upload-proposal");
-        builder.append("spring-boot-proposal");
+        //builder.append("spring-boot-proposal");
         builder.append(File.separator);
         builder.append(file.getOriginalFilename());
         
@@ -97,6 +98,7 @@ public class ProposalController {
     
     @PostMapping
     public ResponseEntity<?> createProposal(@RequestBody Proposal reqData) throws IOException{
+        System.out.println("entra!!");
         ResultDTO<?> responsePacket = null;
         try {
         int year = LocalDate.now().getYear();
@@ -106,25 +108,33 @@ public class ProposalController {
         list = (List<Proposal>) proposalservice.getAllProposal();
        
             int j = 0;
-            String max = null;
-            
-            while (j < list.size()) {             
+            String max = "0000";
+            System.out.println("antes de whilw");
+            while (j < list.size()) {   
+                            System.out.println("repite");
             String[] parts = list.get(j).getCode().split("-");
-            max = parts[1]; // 654321
+            max = parts[1]; 
             j++;  
         }
+                    System.out.println("entra!!2");
+
         int number = Integer.parseInt(max) + 1;
+                System.out.println("entra!!3");
         String format = String.format("%04d", number);
-        String code = null;
-        
+                System.out.println("entra!!4");
+        String code = year + "-" + 0000;
+                System.out.println("entra!!5");
+
         if(list.isEmpty() || "9999".equals(format)){
-            code = year + "-" + 0000;
+        System.out.println("entra!!6");
+            //code = year + "-" + 0000;
             reqData.setCode(code);
         }else{
             code = year + "-" + format;
             reqData.setCode(code);
         }
-        
+                System.out.println("entra!!4");
+
              responsePacket = new ResultDTO<>(proposalservice.createProposal(reqData), 
                      "Proposal Created Successfully", true);  
             return new ResponseEntity<>(responsePacket, HttpStatus.OK);
