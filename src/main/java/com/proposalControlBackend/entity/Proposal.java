@@ -40,8 +40,8 @@ public class Proposal {
     private Date rejectionDate;
     private String rejectionComments;
     private String comments;
-    private String innerDuoCommercial;
-    private String innerDuoPresale;
+    private String commercialManager;
+    private String presaleManager;
     private Date proposalSubmissionDeadline;
     
     public Proposal(){ }
@@ -68,11 +68,27 @@ public class Proposal {
         this.rejectionDate = rejectionDate;
         this.rejectionComments = rejectionComments;
         this.comments = comments;
-        this.innerDuoCommercial = innerDuoCommercial;
-        this.innerDuoPresale = innerDuoPresale;
+        
         this.proposalSubmissionDeadline = proposalSubmissionDeadline;
     }
 
+    public String getCommercialManager() {
+        return commercialManager;
+    }
+
+    public void setCommercialManager(String commercialManager) {
+        this.commercialManager = commercialManager;
+    }
+
+    public String getPresaleManager() {
+        return presaleManager;
+    }
+
+    public void setPresaleManager(String presaleManager) {
+        this.presaleManager = presaleManager;
+    }
+
+    
     
     
 
@@ -101,26 +117,6 @@ public class Proposal {
     public void setComments(String comments) {
         this.comments = comments;
     }
-
-    public String getInnerDuoCommercial() {
-        return innerDuoCommercial;
-    }
-
-    public void setInnerDuoCommercial(String innerDuoCommercial) {
-        this.innerDuoCommercial = innerDuoCommercial;
-    }
-
-    public String getInnerDuoPresale() {
-        return innerDuoPresale;
-    }
-
-    public void setInnerDuoPresale(String innerDuoPresale) {
-        this.innerDuoPresale = innerDuoPresale;
-    }
-    
-    
-    
-    
 
     public String getRejectionUser() {
         return rejectionUser;

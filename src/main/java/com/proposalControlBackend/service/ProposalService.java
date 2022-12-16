@@ -46,6 +46,10 @@ public class ProposalService {
         return null;
     }
     
+    public Proposal getById(Long id){
+        return proposalrepo.getOne(id);
+    }
+    
     public Object getAllProposal(){
         return proposalrepo.findAll();
     } 

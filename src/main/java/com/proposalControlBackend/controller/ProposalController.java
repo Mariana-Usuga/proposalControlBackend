@@ -63,8 +63,10 @@ public class ProposalController {
       return (List<Proposal>) proposalservice.searchDate(start, end);
     }
         
-    @PostMapping("/upload")
-    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes attributes) throws IOException{
+    @PostMapping("/{id}/upload")
+    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @PathVariable(value = "id") Long id,
+            RedirectAttributes attributes) 
+            throws IOException{
         ResultDTO<?> responsePacket = null;
         System.out.println("entra");
         try{
@@ -72,7 +74,10 @@ public class ProposalController {
             responsePacket = new ResultDTO<>("Archivo null", false);
             return new ResponseEntity<>(responsePacket, HttpStatus.BAD_REQUEST);
         }
-             System.out.println(":::  UserController.createUser :::" + file);
+             Proposal proposal = proposalservice.getById(id);
+             System.out.println(":::" + file.getName() +" "  + file.getOriginalFilename()+" " 
+                     + file.getContentType() +" code "+ proposal.getCode() );
+             File renameFile = new File("fichero2.txt");
         StringBuilder builder = new StringBuilder();
         //builder.append(System.getProperty("user.home"));
         builder.append("C:\\Users\\Mariana\\Desktop\\dataProposal");
@@ -108,7 +113,7 @@ public class ProposalController {
         list = (List<Proposal>) proposalservice.getAllProposal();
        
             int j = 0;
-            String max = "0000";
+            String max = "1";
             System.out.println("antes de whilw");
             while (j < list.size()) {   
                             System.out.println("repite");
@@ -122,15 +127,19 @@ public class ProposalController {
                 System.out.println("entra!!3");
         String format = String.format("%04d", number);
                 System.out.println("entra!!4");
-        String code = year + "-" + 0000;
+        String code = year + "-" + format;
                 System.out.println("entra!!5");
 
         if(list.isEmpty() || "9999".equals(format)){
         System.out.println("entra!!6");
             //code = year + "-" + 0000;
-            reqData.setCode(code);
+            int numberEmpty = Integer.parseInt(max) + 1;
+                System.out.println("entra!!3");
+        String formatEmpty = String.format("%04d", numberEmpty);
+        String codeEmpty = year + "-" + formatEmpty;
+            reqData.setCode(codeEmpty);
         }else{
-            code = year + "-" + format;
+            //code = year + "-" + format;
             reqData.setCode(code);
         }
                 System.out.println("entra!!4");

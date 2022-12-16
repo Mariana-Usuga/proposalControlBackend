@@ -40,10 +40,10 @@ public class ApprovedProposal {
     private String folder;
     private String comments;
     private String commentsProposalApproved;
-    private String innerDuoCommercial;
-    private String innerDuoPresale;
     private String editorUser;
     private Date proposalSubmissionDeadline;
+    private String commercialManager;
+    private String presaleManager;
         
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "approvedProposal", cascade = CascadeType.ALL)
     List<Hito> hitos;
@@ -72,8 +72,6 @@ public class ApprovedProposal {
         this.folder = folder;
         this.comments = comments;
         this.commentsProposalApproved = commentsProposalApproved;
-        this.innerDuoCommercial = innerDuoCommercial;
-        this.innerDuoPresale = innerDuoPresale;
         this.editorUser = editorUser;
         this.hitos = hitos;
     }
@@ -94,21 +92,22 @@ public class ApprovedProposal {
         this.commentsProposalApproved = commentsProposalApproved;
     }
 
-    public String getInnerDuoCommercial() {
-        return innerDuoCommercial;
+    public String getCommercialManager() {
+        return commercialManager;
     }
 
-    public void setInnerDuoCommercial(String innerDuoCommercial) {
-        this.innerDuoCommercial = innerDuoCommercial;
+    public void setCommercialManager(String commercialManager) {
+        this.commercialManager = commercialManager;
     }
 
-    public String getInnerDuoPresale() {
-        return innerDuoPresale;
+    public String getPresaleManager() {
+        return presaleManager;
     }
 
-    public void setInnerDuoPresale(String innerDuoPresale) {
-        this.innerDuoPresale = innerDuoPresale;
+    public void setPresaleManager(String presaleManager) {
+        this.presaleManager = presaleManager;
     }
+
     
     
 

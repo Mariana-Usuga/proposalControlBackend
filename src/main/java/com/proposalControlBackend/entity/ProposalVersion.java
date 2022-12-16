@@ -36,8 +36,8 @@ public class ProposalVersion {
     private String folder;
     private String editorUser;
     private String comments;
-    private String innerDuoCommercial;
-    private String innerDuoPresale;
+    private String commercialManager;
+    private String presaleManager;
     private Date proposalSubmissionDeadline;
     
     public ProposalVersion() {}
@@ -62,8 +62,6 @@ public class ProposalVersion {
         this.folder = folder;
         this.editorUser = editorUser;
         this.comments = comments;
-        this.innerDuoCommercial = innerDuoCommercial;
-        this.innerDuoPresale = innerDuoPresale;
     }
 
     public Date getProposalSubmissionDeadline() {
@@ -90,21 +88,23 @@ public class ProposalVersion {
         this.comments = comments;
     }
 
-    public String getInnerDuoCommercial() {
-        return innerDuoCommercial;
+    public String getCommercialManager() {
+        return commercialManager;
     }
 
-    public void setInnerDuoCommercial(String innerDuoCommercial) {
-        this.innerDuoCommercial = innerDuoCommercial;
+    public void setCommercialManager(String commercialManager) {
+        this.commercialManager = commercialManager;
     }
 
-    public String getInnerDuoPresale() {
-        return innerDuoPresale;
+    public String getPresaleManager() {
+        return presaleManager;
     }
 
-    public void setInnerDuoPresale(String innerDuoPresale) {
-        this.innerDuoPresale = innerDuoPresale;
+    public void setPresaleManager(String presaleManager) {
+        this.presaleManager = presaleManager;
     }
+
+    
     
     
     
