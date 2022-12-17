@@ -64,30 +64,36 @@ public class ProposalController {
     }
         
     @PostMapping("/{id}/upload")
-    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @PathVariable(value = "id") Long id,
+    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile fileOrigin, @PathVariable(value = "id") Long id,
             RedirectAttributes attributes) 
             throws IOException{
         ResultDTO<?> responsePacket = null;
         System.out.println("entra");
         try{
-             if(file == null){
+             if(fileOrigin == null){
             responsePacket = new ResultDTO<>("Archivo null", false);
             return new ResponseEntity<>(responsePacket, HttpStatus.BAD_REQUEST);
         }
              Proposal proposal = proposalservice.getById(id);
-             System.out.println(":::" + file.getName() +" "  + file.getOriginalFilename()+" " 
-                     + file.getContentType() +" code "+ proposal.getCode() );
-             File renameFile = new File("fichero2.txt");
+             System.out.println(":::code" + proposal.getCode());
+             
+             String fileName = "C:\\Users\\Mariana\\Desktop\\dataProposal\\"+ proposal.getCode();
+                          System.out.println(":::FILENAME" + fileName);
+             Path pathFolder = Paths.get(fileName);
+             if (!Files.exists(pathFolder)) {
+                 Files.createDirectory(pathFolder);
+                 System.out.println("New Directory created !  ");
+             } else {
+                 System.out.println("Directory already exists");
+             }
+
         StringBuilder builder = new StringBuilder();
-        //builder.append(System.getProperty("user.home"));
-        builder.append("C:\\Users\\Mariana\\Desktop\\dataProposal");
+        builder.append("C:\\Users\\Mariana\\Desktop\\dataProposal\\").append(proposal.getCode());
         builder.append(File.separator);
-        //builder.append("upload-proposal");
-        //builder.append("spring-boot-proposal");
         builder.append(File.separator);
-        builder.append(file.getOriginalFilename());
+        builder.append(fileOrigin.getOriginalFilename());
         
-        byte[] fileBytes = file.getBytes();
+        byte[] fileBytes = fileOrigin.getBytes();
 		Path path = Paths.get(builder.toString());
 		Files.write(path, fileBytes);
         /*attributes.addFlashAttribute("message", "Archivo cargado correctamente ["+builder.toString()+"]");
@@ -112,37 +118,26 @@ public class ProposalController {
         
         list = (List<Proposal>) proposalservice.getAllProposal();
        
-            int j = 0;
+           int j = 0;
             String max = "1";
-            System.out.println("antes de whilw");
             while (j < list.size()) {   
-                            System.out.println("repite");
             String[] parts = list.get(j).getCode().split("-");
             max = parts[1]; 
             j++;  
         }
-                    System.out.println("entra!!2");
 
         int number = Integer.parseInt(max) + 1;
-                System.out.println("entra!!3");
         String format = String.format("%04d", number);
-                System.out.println("entra!!4");
         String code = year + "-" + format;
-                System.out.println("entra!!5");
 
-        if(list.isEmpty() || "9999".equals(format)){
-        System.out.println("entra!!6");
-            //code = year + "-" + 0000;
-            int numberEmpty = Integer.parseInt(max) + 1;
-                System.out.println("entra!!3");
-        String formatEmpty = String.format("%04d", numberEmpty);
+        if(list.isEmpty() || "9999".equals(max)){
+        String formatEmpty = String.format("%04d", 1);
+                    System.out.print("entra en catchh"+ formatEmpty);
         String codeEmpty = year + "-" + formatEmpty;
             reqData.setCode(codeEmpty);
         }else{
-            //code = year + "-" + format;
             reqData.setCode(code);
         }
-                System.out.println("entra!!4");
 
              responsePacket = new ResultDTO<>(proposalservice.createProposal(reqData), 
                      "Proposal Created Successfully", true);  
