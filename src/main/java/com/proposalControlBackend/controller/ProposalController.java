@@ -15,13 +15,16 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -42,6 +45,9 @@ public class ProposalController {
     
     @Autowired
     private ProposalVersionService proposalVersionservice;
+    
+   // @Autowired
+  //FilesStorageService storageService;
     
     @PostMapping("/filter")
     public List<Proposal> getProposalByFilters(@RequestBody Proposal reqData,
@@ -64,7 +70,8 @@ public class ProposalController {
     }
         
     @PostMapping("/{id}/upload")
-    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile fileOrigin, @PathVariable(value = "id") Long id,
+    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile fileOrigin, 
+            @PathVariable(value = "id") Long id,
             RedirectAttributes attributes) 
             throws IOException{
         ResultDTO<?> responsePacket = null;
@@ -74,10 +81,13 @@ public class ProposalController {
             responsePacket = new ResultDTO<>("Archivo null", false);
             return new ResponseEntity<>(responsePacket, HttpStatus.BAD_REQUEST);
         }
+            StringBuilder builder = new StringBuilder();
+
              Proposal proposal = proposalservice.getById(id);
              System.out.println(":::code" + proposal.getCode());
+             System.out.println("files!!" + fileOrigin);
              
-             String fileName = "C:\\Users\\Mariana\\Desktop\\dataProposal\\"+ proposal.getCode();
+              String fileName = "C:\\Users\\Mariana\\Desktop\\dataProposal\\"+ proposal.getCode();
                           System.out.println(":::FILENAME" + fileName);
              Path pathFolder = Paths.get(fileName);
              if (!Files.exists(pathFolder)) {
@@ -86,20 +96,23 @@ public class ProposalController {
              } else {
                  System.out.println("Directory already exists");
              }
-
-        StringBuilder builder = new StringBuilder();
+                 
+                 System.out.println("FILE in list " +fileOrigin.getOriginalFilename());
         builder.append("C:\\Users\\Mariana\\Desktop\\dataProposal\\").append(proposal.getCode());
         builder.append(File.separator);
-        builder.append(File.separator);
+        //builder.append(File.separator);
         builder.append(fileOrigin.getOriginalFilename());
-        
-        byte[] fileBytes = fileOrigin.getBytes();
-		Path path = Paths.get(builder.toString());
-		Files.write(path, fileBytes);
-        /*attributes.addFlashAttribute("message", "Archivo cargado correctamente ["+builder.toString()+"]");
-        return "Archivo cargado correctamente ["+builder.toString()+"]";*/
-         responsePacket = new ResultDTO<>(builder.toString(), true);
-            return new ResponseEntity<>(responsePacket, HttpStatus.OK);
+
+		 byte[] fileBytes = fileOrigin.getBytes();
+                  Path path = Paths.get(builder.toString());
+                  Files.write(path, fileBytes);
+             //} );
+          
+             
+                      responsePacket = new ResultDTO<>(builder.toString(), true);
+
+                         return new ResponseEntity<>(responsePacket, HttpStatus.OK);
+
         }catch (Exception e) {
             System.out.print("entra en catch");
             responsePacket = new ResultDTO<>(e.getMessage(), false);
