@@ -1,4 +1,4 @@
-package com.itteamcorp.proposalControlV1;
+package com.proposalControlBackend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

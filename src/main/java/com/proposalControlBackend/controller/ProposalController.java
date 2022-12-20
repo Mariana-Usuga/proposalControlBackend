@@ -68,12 +68,39 @@ public class ProposalController {
         System.out.println("entra"+ start+ "end" + end);
       return (List<Proposal>) proposalservice.searchDate(start, end);
     }
+    
+    @GetMapping("/files/{code}")
+    public ResponseEntity<?> getFile(@PathVariable(value = "code") String code) throws IOException{
+        ResultDTO<?> responsePacket = null;
+        try{
+            List<String> results = new ArrayList<String>();
+            //File[] files = new File("C:\\Users\\Mariana\\Desktop\\dataProposal\\"+ code).listFiles();
+            File[] files = new File("/opt/tomcat/webapps/archivospropuesta/"+ code).listFiles();
+
+            for (File file : files) {
+                if (file.isFile()) {
+                    results.add(file.getName());
+                }
+            }
+                       responsePacket = new ResultDTO<>(results, 
+                                "Proposal Created Successfully", true); 
+                       return new ResponseEntity<>(responsePacket, HttpStatus.OK);
+
+        }catch (Exception e) {
+            System.out.print("entra en catch");
+            responsePacket = new ResultDTO<>(e.getMessage(), false);
+            return new ResponseEntity<>(responsePacket, HttpStatus.BAD_REQUEST);
+        }
+    }
+    
         
     @PostMapping("/{id}/upload")
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile fileOrigin, 
             @PathVariable(value = "id") Long id,
             RedirectAttributes attributes) 
             throws IOException{
+                     System.out.println(":::id " + id);
+                                  System.out.println(":::file " + fileOrigin.getOriginalFilename());
         ResultDTO<?> responsePacket = null;
         System.out.println("entra");
         try{
@@ -85,36 +112,49 @@ public class ProposalController {
 
              Proposal proposal = proposalservice.getById(id);
              System.out.println(":::code" + proposal.getCode());
-             System.out.println("files!!" + fileOrigin);
              
-              String fileName = "C:\\Users\\Mariana\\Desktop\\dataProposal\\"+ proposal.getCode();
-                          System.out.println(":::FILENAME" + fileName);
+             //Path newRoute;
+             //newRoute = Paths.get("/opt/tomcat/webapps/archivospropuesta/"+ proposal.getCode());
+             //Files.createDirectories(newRoute);
+             
+              //String fileName = "C:\\Users\\Mariana\\Desktop\\dataProposal\\"+ proposal.getCode();
+              String fileName = "/opt/tomcat/webapps/archivospropuesta/"+ proposal.getCode() + "/";
+                          System.out.println(":::FILENAME " + fileName);
              Path pathFolder = Paths.get(fileName);
+                          System.out.println("pathFolder " + pathFolder);
              if (!Files.exists(pathFolder)) {
-                 Files.createDirectory(pathFolder);
+                 //Files.createDirectory(pathFolder);
+                 Files.createDirectories(pathFolder);
                  System.out.println("New Directory created !  ");
              } else {
                  System.out.println("Directory already exists");
              }
                  
                  System.out.println("FILE in list " +fileOrigin.getOriginalFilename());
-        builder.append("C:\\Users\\Mariana\\Desktop\\dataProposal\\").append(proposal.getCode());
+        //builder.append("C:\\Users\\Mariana\\Desktop\\dataProposal\\").append(proposal.getCode());
+        //builder.append("/opt/tomcat/webapps/archivospropuesta/").append(proposal.getCode()).append("/");
+       // builder.append("/opt/tomcat/webapps/archivospropuesta/"+ proposal.getCode()+"/");
+          builder.append("/opt/tomcat/webapps/archivospropuesta/"+ proposal.getCode()+"/");
+
+              System.out.println("despues de ruta");
         builder.append(File.separator);
-        //builder.append(File.separator);
+                         System.out.println("despues de separador ");
         builder.append(fileOrigin.getOriginalFilename());
+                 System.out.println("despues de get original name ");
 
 		 byte[] fileBytes = fileOrigin.getBytes();
                   Path path = Paths.get(builder.toString());
-                  Files.write(path, fileBytes);
-             //} );
-          
+                  Files.write(path, fileBytes);          
              
                       responsePacket = new ResultDTO<>(builder.toString(), true);
-
-                         return new ResponseEntity<>(responsePacket, HttpStatus.OK);
+                      //proposal.setFolder("C:\\Users\\Mariana\\Desktop\\dataProposal\\" + proposal.getCode());
+                      proposal.setFolder("/opt/tomcat/webapps/archivospropuesta/" + proposal.getCode());
+                      proposalservice.updateProposal(proposal);
+                       System.out.println("responsePacket" + responsePacket.getMessage());
+                       return new ResponseEntity<>(responsePacket, HttpStatus.OK);
 
         }catch (Exception e) {
-            System.out.print("entra en catch");
+            System.out.print("entra en catch ");
             responsePacket = new ResultDTO<>(e.getMessage(), false);
             return new ResponseEntity<>(responsePacket, HttpStatus.BAD_REQUEST);
         }
@@ -127,13 +167,16 @@ public class ProposalController {
         try {
         int year = LocalDate.now().getYear();
         
+                    System.out.println("antes de la lista proposal ");
         List<Proposal> list = new ArrayList<Proposal>(); 
-        
+
         list = (List<Proposal>) proposalservice.getAllProposal();
        
            int j = 0;
             String max = "1";
-            while (j < list.size()) {   
+            while (j < list.size()) {
+            System.out.println("conseguir cada codigo "+ list.get(j).getCode());
+            System.out.println("conseguir id "+ list.get(j).getId());
             String[] parts = list.get(j).getCode().split("-");
             max = parts[1]; 
             j++;  
@@ -145,7 +188,6 @@ public class ProposalController {
 
         if(list.isEmpty() || "9999".equals(max)){
         String formatEmpty = String.format("%04d", 1);
-                    System.out.print("entra en catchh"+ formatEmpty);
         String codeEmpty = year + "-" + formatEmpty;
             reqData.setCode(codeEmpty);
         }else{
@@ -156,7 +198,7 @@ public class ProposalController {
                      "Proposal Created Successfully", true);  
             return new ResponseEntity<>(responsePacket, HttpStatus.OK);
             } catch (Exception e) {
-            System.out.print("entra en catchh");
+            System.out.println("entra en catchh ");
             responsePacket = new ResultDTO<>(e.getMessage(), false);
             return new ResponseEntity<>(responsePacket, HttpStatus.BAD_REQUEST);
         }

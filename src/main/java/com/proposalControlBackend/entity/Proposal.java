@@ -46,7 +46,11 @@ public class Proposal {
     
     public Proposal(){ }
 
-    public Proposal(String code, String company, String customer, String customerReference, Integer version, Date dateVersion, String servicioConcept, String typeOfService, String currency, Integer baseAmount, Integer totalAmount, String stateP, String wayToPay, Integer wayToPayDays, String creatorUser, String folder, String editorUser, String rejectionUser, Date rejectionDate, String rejectionComments, String comments, String innerDuoCommercial, String innerDuoPresale, Date proposalSubmissionDeadline) {
+    public Proposal(String code, String company, String customer, String customerReference, Integer version, 
+            Date dateVersion, String servicioConcept, String typeOfService, String currency, Integer baseAmount, 
+            Integer totalAmount, String stateP, String wayToPay, Integer wayToPayDays, String creatorUser, 
+            String folder, String editorUser, String rejectionUser, Date rejectionDate, String rejectionComments, 
+            String comments,Date proposalSubmissionDeadline) {
         this.code = code;
         this.company = company;
         this.customer = customer;
