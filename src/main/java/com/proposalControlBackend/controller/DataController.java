@@ -2,12 +2,18 @@
 package com.proposalControlBackend.controller;
 
 import com.proposalControlBackend.bean.ResultDTO;
+import com.proposalControlBackend.entity.Customer;
+import com.proposalControlBackend.entity.CustomerReference;
+import com.proposalControlBackend.entity.Proposal;
 import com.proposalControlBackend.service.DataService;
+import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -97,6 +103,37 @@ public class DataController {
         }
         
 	}
+        
+        @PostMapping("/customer")
+        public ResponseEntity<?> createCustomer(@RequestBody Customer customer) throws IOException{
+        System.out.println("entra!!");
+        ResultDTO<?> responsePacket = null;
+        try {
+             responsePacket = new ResultDTO<>(dataService.createCustomer(customer), 
+                     "customer Created Successfully", true);  
+            return new ResponseEntity<>(responsePacket, HttpStatus.OK);
+            } catch (Exception e) {
+            System.out.println("entra en catchh ");
+            responsePacket = new ResultDTO<>(e.getMessage(), false);
+            return new ResponseEntity<>(responsePacket, HttpStatus.BAD_REQUEST);
+        }
+        }
+        
+        @PostMapping("/customerReference")
+        public ResponseEntity<?> createCustomer(@RequestBody CustomerReference customerReference) throws IOException{
+        System.out.println("entra!!");
+        ResultDTO<?> responsePacket = null;
+        try {
+             responsePacket = new ResultDTO<>(dataService.createCustomerReference(customerReference), 
+                     "customer reference Created Successfully", true);  
+            return new ResponseEntity<>(responsePacket, HttpStatus.OK);
+            } catch (Exception e) {
+            System.out.println("entra en catchh ");
+            responsePacket = new ResultDTO<>(e.getMessage(), false);
+            return new ResponseEntity<>(responsePacket, HttpStatus.BAD_REQUEST);
+        }
+        }
+        
         
         /*@GetMapping("/getAllCurrency")
 	public ResponseEntity<?> getAllCurrency() {

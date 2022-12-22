@@ -1,6 +1,8 @@
 
 package com.proposalControlBackend.service;
 
+import com.proposalControlBackend.entity.Customer;
+import com.proposalControlBackend.entity.CustomerReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.proposalControlBackend.repo.CompanyRepo;
 import com.proposalControlBackend.repo.CurrencyRepo;
@@ -54,5 +56,13 @@ public class DataService {
     
     public Object getAllCurrency(){
         return currencyRepo.findAll();
+    }
+    
+    public Object createCustomer(Customer customer){
+        return  customerRepo.save(customer);
+    }
+    
+    public Object createCustomerReference(CustomerReference customerReference){
+        return  customerReferenceRepo.save(customerReference);
     }
 }
