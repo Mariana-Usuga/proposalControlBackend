@@ -65,4 +65,14 @@ public class DataService {
     public Object createCustomerReference(CustomerReference customerReference){
         return  customerReferenceRepo.save(customerReference);
     }
+    
+     public Customer deleteCustomer(Long id){
+        customerRepo.deleteById(id);
+        return null;
+    }
+     
+       public CustomerReference deleteCustomerRerefence(Long id){
+        customerReferenceRepo.deleteById(id);
+        return null;
+    }
 }
