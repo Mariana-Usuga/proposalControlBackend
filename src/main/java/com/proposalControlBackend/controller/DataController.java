@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -134,6 +136,40 @@ public class DataController {
         }
         }
         
+        
+        @DeleteMapping("/customer/{id}")
+        public ResponseEntity<?> deleteCustomer(@PathVariable(value = "id") Long id) {
+        System.out.println("delete");
+        ResultDTO<?> responsePacket = null;
+        try {
+            //proposalVersionservice.getProposalsById(id);
+            responsePacket = new ResultDTO<>(dataService.deleteCustomer(id), 
+                    "proposal deleted successfully !!", true);
+            return new ResponseEntity<>(responsePacket, HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println("entra en catch");
+            responsePacket = new ResultDTO<>(e.getMessage(), false);
+            return new ResponseEntity<>(responsePacket, HttpStatus.BAD_REQUEST);
+        }
+     
+    }
+        
+        @DeleteMapping("/customerReference/{id}")
+        public ResponseEntity<?> deleteCustomerReference(@PathVariable(value = "id") Long id) {
+        System.out.println("delete");
+        ResultDTO<?> responsePacket = null;
+        try {
+            //proposalVersionservice.getProposalsById(id);
+            responsePacket = new ResultDTO<>(dataService.deleteCustomerRerefence(id), 
+                    "proposal deleted successfully !!", true);
+            return new ResponseEntity<>(responsePacket, HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println("entra en catch");
+            responsePacket = new ResultDTO<>(e.getMessage(), false);
+            return new ResponseEntity<>(responsePacket, HttpStatus.BAD_REQUEST);
+        }
+     
+    }
         
         /*@GetMapping("/getAllCurrency")
 	public ResponseEntity<?> getAllCurrency() {
