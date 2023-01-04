@@ -3,8 +3,6 @@ package com.proposalControlBackend.controller;
 
 import com.proposalControlBackend.bean.ResultDTO;
 import com.proposalControlBackend.entity.Customer;
-import com.proposalControlBackend.entity.CustomerReference;
-import com.proposalControlBackend.entity.Proposal;
 import com.proposalControlBackend.service.DataService;
 import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +56,7 @@ public class DataController {
         }
 	}
         
-        @GetMapping("/getAllCustomerReference")
+        /*@GetMapping("/getAllCustomerReference")
 	public ResponseEntity<?> getAllCustomerReference() {
             System.err.println(":::  UserController.getUserById ::::::");
         
@@ -74,7 +72,7 @@ public class DataController {
             responsePacket = new ResultDTO<>(e.getMessage(), false);
             return new ResponseEntity<>(responsePacket, HttpStatus.BAD_REQUEST);
         }
-	}
+	}*/
         
         @GetMapping("/getAllState")
 	public ResponseEntity<?> getAllState() {        
@@ -121,7 +119,7 @@ public class DataController {
         }
         }
         
-        @PostMapping("/customerReference")
+        /*@PostMapping("/customerReference")
         public ResponseEntity<?> createCustomer(@RequestBody CustomerReference customerReference) throws IOException{
         System.out.println("entra!!");
         ResultDTO<?> responsePacket = null;
@@ -134,7 +132,7 @@ public class DataController {
             responsePacket = new ResultDTO<>(e.getMessage(), false);
             return new ResponseEntity<>(responsePacket, HttpStatus.BAD_REQUEST);
         }
-        }
+        }*/
         
         
         @DeleteMapping("/customer/{id}")
@@ -154,7 +152,7 @@ public class DataController {
      
     }
         
-        @DeleteMapping("/customerReference/{id}")
+        /*@DeleteMapping("/customerReference/{id}")
         public ResponseEntity<?> deleteCustomerReference(@PathVariable(value = "id") Long id) {
         System.out.println("delete");
         ResultDTO<?> responsePacket = null;
@@ -169,7 +167,7 @@ public class DataController {
             return new ResponseEntity<>(responsePacket, HttpStatus.BAD_REQUEST);
         }
      
-    }
+    }*/
         
         /*@GetMapping("/getAllCurrency")
 	public ResponseEntity<?> getAllCurrency() {

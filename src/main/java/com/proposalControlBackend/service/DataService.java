@@ -2,11 +2,9 @@
 package com.proposalControlBackend.service;
 
 import com.proposalControlBackend.entity.Customer;
-import com.proposalControlBackend.entity.CustomerReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.proposalControlBackend.repo.CompanyRepo;
 import com.proposalControlBackend.repo.CurrencyRepo;
-import com.proposalControlBackend.repo.CustomerReferenceRepo;
 import com.proposalControlBackend.repo.CustomerRepo;
 import com.proposalControlBackend.repo.StateRepo;
 import com.proposalControlBackend.repo.TypeOfServiceRepo;
@@ -20,10 +18,7 @@ public class DataService {
     
     @Autowired
     private CustomerRepo customerRepo;
-    
-    @Autowired
-    private CustomerReferenceRepo customerReferenceRepo;
-    
+        
     @Autowired
     private StateRepo stateRepo;
      
@@ -39,10 +34,6 @@ public class DataService {
     
      public Object getAllCustomer(){
         return customerRepo.findAll();
-    }
-     
-    public Object getAllCustomerReference(){
-        return customerReferenceRepo.findAll();
     }
     
     public Object getAllState(){
@@ -62,17 +53,13 @@ public class DataService {
         return  customerRepo.save(customer);
     }
     
-    public Object createCustomerReference(CustomerReference customerReference){
-        return  customerReferenceRepo.save(customerReference);
-    }
-    
      public Customer deleteCustomer(Long id){
         customerRepo.deleteById(id);
         return null;
     }
      
-       public CustomerReference deleteCustomerRerefence(Long id){
+       /*public CustomerReference deleteCustomerRerefence(Long id){
         customerReferenceRepo.deleteById(id);
         return null;
-    }
+    }*/
 }
