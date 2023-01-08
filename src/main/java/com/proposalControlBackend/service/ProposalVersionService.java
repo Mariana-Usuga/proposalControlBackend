@@ -25,4 +25,10 @@ public class ProposalVersionService {
        proposalVersionrepo.deleteById(id);
         return null;
     }
+      
+      public ProposalVersion deleteByCode(String code){
+          proposalVersionrepo.deleteByCode(code);
+          return null;
+      }
+              
 }

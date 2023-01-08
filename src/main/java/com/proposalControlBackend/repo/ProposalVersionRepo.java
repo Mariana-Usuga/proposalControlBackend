@@ -19,4 +19,7 @@ public interface ProposalVersionRepo extends JpaRepository<ProposalVersion, Long
     @Query("SELECT p FROM ProposalVersion p WHERE p.proposalId =?1")
     List<ProposalVersion> searchById(@Param("id") Long id);
     
+    @Query("delete from ProposalVersion b where b.code=:code")
+    void deleteByCode(@Param("code") String code);
+    
 }

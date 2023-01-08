@@ -112,12 +112,7 @@ public class ProposalController {
 
              Proposal proposal = proposalservice.getById(id);
              System.out.println(":::code" + proposal.getCode());
-             
-             //Path newRoute;
-             //newRoute = Paths.get("/opt/tomcat/webapps/archivospropuesta/"+ proposal.getCode());
-             //Files.createDirectories(newRoute);
-             
-              //String fileName = "C:\\Users\\Mariana\\Desktop\\dataProposal\\"+ proposal.getCode();
+         
               String fileName = "/opt/tomcat/webapps/archivospropuesta/"+ proposal.getCode() + "/";
                           System.out.println(":::FILENAME " + fileName);
              Path pathFolder = Paths.get(fileName);
@@ -131,9 +126,6 @@ public class ProposalController {
              }
                  
                  System.out.println("FILE in list " +fileOrigin.getOriginalFilename());
-        //builder.append("C:\\Users\\Mariana\\Desktop\\dataProposal\\").append(proposal.getCode());
-        //builder.append("/opt/tomcat/webapps/archivospropuesta/").append(proposal.getCode()).append("/");
-       // builder.append("/opt/tomcat/webapps/archivospropuesta/"+ proposal.getCode()+"/");
           builder.append("/opt/tomcat/webapps/archivospropuesta/"+ proposal.getCode()+"/");
 
               System.out.println("despues de ruta");
@@ -174,17 +166,21 @@ public class ProposalController {
        
            int j = 0;
             String max = "1";
+            Integer m = 1;
             while (j < list.size()) {
-            System.out.println("conseguir cada codigo "+ list.get(j).getCode());
-            System.out.println("conseguir id "+ list.get(j).getId());
             String[] parts = list.get(j).getCode().split("-");
-            max = parts[1]; 
+            int number = Integer.parseInt(parts[1]);
+            if(number > m){
+                m = number;    
+            }
             j++;  
         }
 
-        int number = Integer.parseInt(max) + 1;
+        int number = m + 1;
+            System.out.println("number "+ number);
         String format = String.format("%04d", number);
         String code = year + "-" + format;
+
 
         if(list.isEmpty() || "9999".equals(max)){
         String formatEmpty = String.format("%04d", 1);
