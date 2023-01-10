@@ -15,10 +15,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +45,11 @@ public class ProposalController {
     
    // @Autowired
   //FilesStorageService storageService;
+    
+    @GetMapping
+	public List<Proposal> getAll() {
+      return (List<Proposal>) proposalservice.getAll();
+	}
     
     @PostMapping("/filter")
     public List<Proposal> getProposalByFilters(@RequestBody Proposal reqData,

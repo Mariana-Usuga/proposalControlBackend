@@ -4,6 +4,7 @@ package com.proposalControlBackend.service;
 import com.proposalControlBackend.repo.ProposalRepo;
 import com.proposalControlBackend.entity.Proposal;
 import java.util.Date;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,10 @@ public class ProposalService {
      public Proposal getProposalById(Long id){
         return  proposalrepo.searchByProposalId(id);
     }
+     
+     public List<Proposal> getAll(){
+        return proposalrepo.findAll();
+     }
     
     
     public Object createProposal(Proposal proposal){

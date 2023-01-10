@@ -11,26 +11,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProposalRepo extends JpaRepository<Proposal, Long> {
-    
-    /*@Query("SELECT p FROM Proposal p WHERE (p.dateVersion >= ?16 AND p.dateVersion <= ?17 )"
-            + "AND (?1 is null or p.company = ?1) AND (?2 is null or p.customer =?2)"
-            + " AND (?3 is null or p.customerReference = ?3) "
-            + "AND (?4 is null or p.servicioConcept = ?4) AND (?5 is null or p.typeOfService = ?5) "
-            + "AND (?6 is null or p.currency = ?6) AND (?7 is null or p.baseAmount = ?7) AND (?8 is null or p.totalAmount = ?8) "
-            + "AND (?9 is null or p.stateP = ?9) AND (?10 is null or p.wayToPay = ?10) AND (?11 is null or p.folder = ?11)"
-            + "AND (?12 is null or p.wayToPayDays = ?12) AND (?13 is null or p.creatorUser = ?13)"
-            + "AND (?14 is null or p.version = ?14) AND (?15 is null or p.code = ?15)")
-    List<Proposal> search(@Param("company") String company, @Param("customer") String customer,
-            @Param("customerReference") String customerReference,
-            @Param("servicioConcept") String servicioConcept,
-            @Param("typeOfService") String typeOfService, @Param("currency") String currency,
-            @Param("baseAmount") Integer baseAmount,  @Param("totalAmount") Integer totalAmount,
-            @Param("stateP") String stateP,  @Param("wayToPay") String wayToPay, 
-            @Param("folder") String folder, @Param("wayToPayDays") Integer wayToPayDays,
-            @Param("creatorUser") String creatorUser, @Param("version") Integer version,
-            @Param("code") String code, @Param("startDate") Date startDate, @Param("endDate") Date endDate
-            );*/
-    
+        
     @Query("SELECT p FROM Proposal p WHERE (p.dateVersion >= :startDate AND p.dateVersion <= :endDate )"
             + "AND (:company is null or p.company = :company) AND (:customer is null or p.customer = :customer)"
             + " AND (:customerReference is null or p.customerReference = :customerReference) "

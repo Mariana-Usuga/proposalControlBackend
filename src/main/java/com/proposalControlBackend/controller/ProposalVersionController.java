@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -31,13 +32,15 @@ public class ProposalVersionController {
 	}
         
             
-    @DeleteMapping("/{code}")
-    public ResponseEntity<?> delete(@PathVariable(value = "code") String code) {
-        System.out.println("delete");
+    @DeleteMapping
+    public ResponseEntity<?> delete(@RequestParam String code) {
+        System.out.println("delete "+ code);
         ResultDTO<?> responsePacket = null;
         try {
+                    System.out.println("antes de result ");
             responsePacket = new ResultDTO<>(proposalVersionservice.deleteByCode(code),
                     "proposal deleted successfully !!", true);
+                                System.out.println("despues ");
             return new ResponseEntity<>(responsePacket, HttpStatus.OK);
         } catch (Exception e) {
             System.out.println("entra en catch");

@@ -27,6 +27,7 @@ public class ProposalVersionService {
     }
       
       public ProposalVersion deleteByCode(String code){
+                                          System.out.println("in service " + code);
           proposalVersionrepo.deleteByCode(code);
           return null;
       }

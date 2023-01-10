@@ -35,6 +35,7 @@ public class ProposalVersion {
     private String creatorUser;
     private String folder;
     private String editorUser;
+    @Column(length=10000)
     private String comments;
     private String commercialManager;
     private String presaleManager;
