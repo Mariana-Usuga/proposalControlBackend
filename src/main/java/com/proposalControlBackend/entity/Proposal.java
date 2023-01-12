@@ -7,7 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -24,6 +23,7 @@ public class Proposal {
     private Integer version;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateVersion;
+    @Column(length=7000)
     private String servicioConcept;
     private String typeOfService;
     private String currency;
@@ -37,10 +37,10 @@ public class Proposal {
     private String editorUser;
     private String rejectionUser;
     //@Temporal(javax.persistence.TemporalType.DATE)
-     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date rejectionDate;
     private String rejectionComments;
-    @Column(length=10000)
+    @Column(length=20000)
     private String comments;
     private String commercialManager;
     private String presaleManager;
