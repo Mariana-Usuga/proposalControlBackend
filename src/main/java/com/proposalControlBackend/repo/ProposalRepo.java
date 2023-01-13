@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProposalRepo extends JpaRepository<Proposal, Long> {
+    
         
     @Query("SELECT p FROM Proposal p WHERE (p.dateVersion >= :startDate AND p.dateVersion <= :endDate )"
             + "AND (:company is null or p.company = :company) AND (:customer is null or p.customer = :customer)"

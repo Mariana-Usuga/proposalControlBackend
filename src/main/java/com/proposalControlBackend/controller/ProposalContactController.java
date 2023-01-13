@@ -55,12 +55,12 @@ public class ProposalContactController {
 	return proposalContactService.getProposalById(id);
 	}
     
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
+    @DeleteMapping("/{idProposal}")
+    public ResponseEntity<?> delete(@PathVariable(value = "idProposal") Long id) {
         System.out.println("delete");
         ResultDTO<?> responsePacket = null;
         try {
-            responsePacket = new ResultDTO<>(proposalContactService.delete(id), 
+            responsePacket = new ResultDTO<>(proposalContactService.deleteByCode(id), 
                     "proposal deleted successfully !!", true);
             return new ResponseEntity<>(responsePacket, HttpStatus.OK);
         } catch (Exception e) {

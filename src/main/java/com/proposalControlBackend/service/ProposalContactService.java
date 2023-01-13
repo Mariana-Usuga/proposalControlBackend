@@ -28,4 +28,9 @@ public class ProposalContactService {
         proposalContactRepo.deleteById(id);
         return null;
     }
+     
+     public ProposalContact deleteByCode(Long id){
+        proposalContactRepo.deleteByCode(id);
+        return null;
+    }
 }

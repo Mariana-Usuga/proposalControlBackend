@@ -11,6 +11,7 @@ public class ResultDTO<T> {
     private T data;
     private String message;
     private boolean isSuccess;
+    //private String debugMessage;
     
     public ResultDTO() {
         super();
@@ -21,6 +22,7 @@ public class ResultDTO<T> {
         this.data = data;
         this.message = message;
         this.isSuccess = isSuccess;
+        //this.debugMessage = debugMessage;
     }
     
     public ResultDTO(String message, boolean isSuccess) {

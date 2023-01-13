@@ -4,6 +4,7 @@ import com.proposalControlBackend.bean.ResultDTO;
 import com.proposalControlBackend.service.ProposalService;
 import com.proposalControlBackend.entity.Proposal;
 import com.proposalControlBackend.entity.ProposalVersion;
+import com.proposalControlBackend.repo.ProposalRepo;
 import com.proposalControlBackend.service.ProposalVersionService;
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +18,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -42,6 +45,9 @@ public class ProposalController {
     
     @Autowired
     private ProposalVersionService proposalVersionservice;
+    
+    @Autowired
+    private ProposalRepo proposalrepo;
     
    // @Autowired
   //FilesStorageService storageService;
@@ -77,7 +83,8 @@ public class ProposalController {
         try{
             List<String> results = new ArrayList<String>();
             //File[] files = new File("C:\\Users\\Mariana\\Desktop\\dataProposal\\"+ code).listFiles();
-            File[] files = new File("/opt/tomcat/webapps/archivospropuesta/"+ code).listFiles();
+            //File[] files = new File("/opt/tomcat/webapps/archivospropuesta/"+ code).listFiles();
+            File[] files = new File("/home/wilmar/projectsMariana/archivosPropuestas/"+ code).listFiles();
 
             for (File file : files) {
                 if (file.isFile()) {
@@ -115,7 +122,8 @@ public class ProposalController {
              Proposal proposal = proposalservice.getById(id);
              System.out.println(":::code" + proposal.getCode());
          
-              String fileName = "/opt/tomcat/webapps/archivospropuesta/"+ proposal.getCode() + "/";
+              //String fileName = "/opt/tomcat/webapps/archivospropuesta/"+ proposal.getCode() + "/";
+              String fileName = "/home/wilmar/projectsMariana/archivosPropuestas/" + proposal.getCode();
                           System.out.println(":::FILENAME " + fileName);
              Path pathFolder = Paths.get(fileName);
                           System.out.println("pathFolder " + pathFolder);
@@ -128,7 +136,8 @@ public class ProposalController {
              }
                  
                  System.out.println("FILE in list " +fileOrigin.getOriginalFilename());
-          builder.append("/opt/tomcat/webapps/archivospropuesta/"+ proposal.getCode()+"/");
+          //builder.append("/opt/tomcat/webapps/archivospropuesta/"+ proposal.getCode()+"/");
+          builder.append("/home/wilmar/projectsMariana/archivosPropuestas/" + proposal.getCode() + "/");
 
               System.out.println("despues de ruta");
         builder.append(File.separator);
@@ -138,11 +147,11 @@ public class ProposalController {
 
 		 byte[] fileBytes = fileOrigin.getBytes();
                   Path path = Paths.get(builder.toString());
-                  Files.write(path, fileBytes);          
-             
-                      responsePacket = new ResultDTO<>(builder.toString(), true);
-                      //proposal.setFolder("C:\\Users\\Mariana\\Desktop\\dataProposal\\" + proposal.getCode());
-                      proposal.setFolder("/opt/tomcat/webapps/archivospropuesta/" + proposal.getCode());
+                  Files.write(path, fileBytes);
+                  responsePacket = new ResultDTO<>(builder.toString(), true);
+                  proposal.setFolder("/home/wilmar/projectsMariana/archivosPropuestas/" + proposal.getCode());
+                      //proposal.setFolder("C:\\\Mariana\\Desktop\\dataProposal\\" + proposal.getCode());
+                      //proposal.setFolder("/opt/tomcat/webapps/archivospropuesta/" + proposal.getCode());
                       proposalservice.updateProposal(proposal);
                        System.out.println("responsePacket" + responsePacket.getMessage());
                        return new ResponseEntity<>(responsePacket, HttpStatus.OK);
@@ -155,23 +164,33 @@ public class ProposalController {
     }
     
     @PostMapping
-    public ResponseEntity<?> createProposal(@RequestBody Proposal reqData) throws IOException{
-        System.out.println("entra!!");
+    public ResponseEntity<?> createProposal(@RequestBody Proposal reqData,
+    Exception exception,
+      HttpStatus httpStatus,
+      WebRequest request
+    ) throws IOException{
+         System.out.println("entra!!");
         ResultDTO<?> responsePacket = null;
-        try {
+       
+      try {
         int year = LocalDate.now().getYear();
         
                     System.out.println("antes de la lista proposal ");
         List<Proposal> list = new ArrayList<Proposal>(); 
 
         list = (List<Proposal>) proposalservice.getAllProposal();
-       
+        
            int j = 0;
             String max = "1";
             Integer m = 1;
             while (j < list.size()) {
             String[] parts = list.get(j).getCode().split("-");
             int number = Integer.parseInt(parts[1]);
+                  
+            if(list.get(j).getCode().equals(reqData.getCode())){
+                responsePacket = new ResultDTO<>("code " +reqData.getCode() + " already exists", false);
+                return new ResponseEntity<>(responsePacket, HttpStatus.BAD_REQUEST);
+            }
             if(number > m){
                 m = number;    
             }
@@ -184,18 +203,29 @@ public class ProposalController {
         String code = year + "-" + format;
 
 
-        if(list.isEmpty() || "9999".equals(max)){
+        if(list.isEmpty() || "9999".equals(m)){
         String formatEmpty = String.format("%04d", 1);
         String codeEmpty = year + "-" + formatEmpty;
             reqData.setCode(codeEmpty);
         }else{
-            reqData.setCode(code);
+            Proposal proposal = proposalservice.getById(reqData.getId());
+            if(reqData.getCode().equals("")){
+                 System.out.println("entra if!!! ");
+                reqData.setCode(code);
+            }else{
+                String url = "/home/wilmar/projectsMariana/archivosPropuestas/"+ reqData.getCode();
+                String TARGET_FILE = "/home/wilmar/projectsMariana/archivosPropuestas/"+ proposal.getCode();
+                File fileToMove = new File(TARGET_FILE);
+                fileToMove.renameTo(new File(url));
+                reqData.setFolder("/home/wilmar/projectsMariana/archivosPropuestas/" + reqData.getCode());
+                reqData.setCode(reqData.getCode());
+            }
         }
 
              responsePacket = new ResultDTO<>(proposalservice.createProposal(reqData), 
                      "Proposal Created Successfully", true);  
             return new ResponseEntity<>(responsePacket, HttpStatus.OK);
-            } catch (Exception e) {
+           } catch (DataIntegrityViolationException e) {
             System.out.println("entra en catchh ");
             responsePacket = new ResultDTO<>(e.getMessage(), false);
             return new ResponseEntity<>(responsePacket, HttpStatus.BAD_REQUEST);
@@ -234,7 +264,7 @@ public class ProposalController {
         ResultDTO<?> responsePacket = null;
         try {
             proposalVersionservice.getProposalsById(id);
-            responsePacket = new ResultDTO<>(proposalservice.delete(id), 
+            responsePacket = new ResultDTO<>(proposalservice , 
                     "proposal deleted successfully !!", true);
             return new ResponseEntity<>(responsePacket, HttpStatus.OK);
         } catch (Exception e) {
