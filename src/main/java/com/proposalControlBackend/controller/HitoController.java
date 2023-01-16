@@ -4,8 +4,12 @@ package com.proposalControlBackend.controller;
 import com.proposalControlBackend.bean.ResultDTO;
 import com.proposalControlBackend.entity.ApprovedProposal;
 import com.proposalControlBackend.entity.Hito;
+import com.proposalControlBackend.entity.Proposal;
 import com.proposalControlBackend.repo.ApprovedProposalRepo;
+import com.proposalControlBackend.repo.HitoRepo;
 import com.proposalControlBackend.service.ApprovedProposalService;
+import com.proposalControlBackend.service.HitoService;
+import com.proposalControlBackend.service.ProposalService;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +34,13 @@ public class HitoController {
        
         @Autowired
     private ApprovedProposalRepo approvedProposalrepo; 
+        
+    @Autowired
+    private HitoService hitoService; 
+    
+    @Autowired
+    private ProposalService proposalService;  
+    
      
 
      @PostMapping("/{idProposal}")
@@ -62,5 +74,6 @@ public class HitoController {
             return new ResponseEntity<>(responsePacket, HttpStatus.BAD_REQUEST);
         }
     }
+    
     
 }

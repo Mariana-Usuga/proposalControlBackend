@@ -1,5 +1,6 @@
 package com.proposalControlBackend.controller;
 
+import static antlr.build.ANTLR.root;
 import com.proposalControlBackend.bean.ResultDTO;
 import com.proposalControlBackend.service.ProposalService;
 import com.proposalControlBackend.entity.Proposal;
@@ -83,8 +84,8 @@ public class ProposalController {
         try{
             List<String> results = new ArrayList<String>();
             //File[] files = new File("C:\\Users\\Mariana\\Desktop\\dataProposal\\"+ code).listFiles();
-            //File[] files = new File("/opt/tomcat/webapps/archivospropuesta/"+ code).listFiles();
-            File[] files = new File("/home/wilmar/projectsMariana/archivosPropuestas/"+ code).listFiles();
+            File[] files = new File("/opt/tomcat/webapps/archivospropuesta/"+ code).listFiles();
+            //File[] files = new File("/home/wilmar/projectsMariana/archivosPropuestas/"+ code).listFiles();
 
             for (File file : files) {
                 if (file.isFile()) {
@@ -122,8 +123,8 @@ public class ProposalController {
              Proposal proposal = proposalservice.getById(id);
              System.out.println(":::code" + proposal.getCode());
          
-              //String fileName = "/opt/tomcat/webapps/archivospropuesta/"+ proposal.getCode() + "/";
-              String fileName = "/home/wilmar/projectsMariana/archivosPropuestas/" + proposal.getCode();
+              String fileName = "/opt/tomcat/webapps/archivospropuesta/"+ proposal.getCode();
+              //String fileName = "/home/wilmar/projectsMariana/archivosPropuestas/" + proposal.getCode();
                           System.out.println(":::FILENAME " + fileName);
              Path pathFolder = Paths.get(fileName);
                           System.out.println("pathFolder " + pathFolder);
@@ -136,8 +137,8 @@ public class ProposalController {
              }
                  
                  System.out.println("FILE in list " +fileOrigin.getOriginalFilename());
-          //builder.append("/opt/tomcat/webapps/archivospropuesta/"+ proposal.getCode()+"/");
-          builder.append("/home/wilmar/projectsMariana/archivosPropuestas/" + proposal.getCode() + "/");
+          builder.append("/opt/tomcat/webapps/archivospropuesta/"+ proposal.getCode()+"/");
+          //builder.append("/home/wilmar/projectsMariana/archivosPropuestas/" + proposal.getCode() + "/");
 
               System.out.println("despues de ruta");
         builder.append(File.separator);
@@ -149,9 +150,9 @@ public class ProposalController {
                   Path path = Paths.get(builder.toString());
                   Files.write(path, fileBytes);
                   responsePacket = new ResultDTO<>(builder.toString(), true);
-                  proposal.setFolder("/home/wilmar/projectsMariana/archivosPropuestas/" + proposal.getCode());
+                  //proposal.setFolder("/home/wilmar/projectsMariana/archivosPropuestas/" + proposal.getCode());
                       //proposal.setFolder("C:\\\Mariana\\Desktop\\dataProposal\\" + proposal.getCode());
-                      //proposal.setFolder("/opt/tomcat/webapps/archivospropuesta/" + proposal.getCode());
+                      proposal.setFolder("/opt/tomcat/webapps/archivospropuesta/" + proposal.getCode());
                       proposalservice.updateProposal(proposal);
                        System.out.println("responsePacket" + responsePacket.getMessage());
                        return new ResponseEntity<>(responsePacket, HttpStatus.OK);
@@ -161,6 +162,75 @@ public class ProposalController {
             responsePacket = new ResultDTO<>(e.getMessage(), false);
             return new ResponseEntity<>(responsePacket, HttpStatus.BAD_REQUEST);
         }
+    }
+    
+    @GetMapping("/getFollowingCode")
+    public ResponseEntity<?> getFollowingCode(){
+          System.out.println("entra!!");
+        ResultDTO<?> responsePacket = null;
+       
+      try {
+          String followingCode = "";
+        int year = LocalDate.now().getYear();
+        
+                    System.out.println("antes de la lista proposal ");
+        List<Proposal> list = new ArrayList<Proposal>(); 
+
+        list = (List<Proposal>) proposalservice.getAllProposal();
+        
+           int j = 0;
+            String max = "1";
+            Integer m = 1;
+            while (j < list.size()) {
+            String[] parts = list.get(j).getCode().split("-");
+            int number = Integer.parseInt(parts[1]);
+            
+            if(number > m){
+                m = number;    
+            }
+            j++;  
+        }
+
+        int number = m + 1;
+            System.out.println("number "+ number);
+        String format = String.format("%04d", number);
+        String code = year + "-" + format;
+
+
+        if(list.isEmpty() || "9999".equals(m)){
+        String formatEmpty = String.format("%04d", 1);
+        String codeEmpty = year + "-" + formatEmpty;
+        followingCode = codeEmpty;
+        }else{
+            followingCode = code;
+        }
+
+             responsePacket = new ResultDTO<>(followingCode, 
+                     "Segiente codigo", true);  
+            return new ResponseEntity<>(responsePacket, HttpStatus.OK);
+           } catch (DataIntegrityViolationException e) {
+            System.out.println("entra en catchh ");
+            responsePacket = new ResultDTO<>(e.getMessage(), false);
+            return new ResponseEntity<>(responsePacket, HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+        
+    @PostMapping("version")
+    public ResponseEntity<?> createProposalVersion(@RequestBody ProposalVersion reqData) throws IOException{
+        System.out.println(":::  UserController.createUser :::" + reqData.getVersion());
+        ResultDTO<?> responsePacket = null;
+       
+            try {
+             responsePacket = new ResultDTO<>(proposalVersionservice.createProposal(reqData), 
+                     "Proposal Created Successfully", true);  
+            return new ResponseEntity<>(responsePacket, HttpStatus.OK);
+            } catch (Exception e) {
+            System.out.print("entra en catchh");
+            responsePacket = new ResultDTO<>(e.getMessage(), false);
+            return new ResponseEntity<>(responsePacket, HttpStatus.BAD_REQUEST);
+        }
+            
     }
     
     @PostMapping
@@ -213,11 +283,14 @@ public class ProposalController {
                  System.out.println("entra if!!! ");
                 reqData.setCode(code);
             }else{
-                String url = "/home/wilmar/projectsMariana/archivosPropuestas/"+ reqData.getCode();
-                String TARGET_FILE = "/home/wilmar/projectsMariana/archivosPropuestas/"+ proposal.getCode();
+                String url = "/opt/tomcat/webapps/archivospropuesta/" + reqData.getCode();
+                //String url = "/home/wilmar/projectsMariana/archivosPropuestas/"+ reqData.getCode();
+                //String TARGET_FILE = "/home/wilmar/projectsMariana/archivosPropuestas/"+ proposal.getCode();
+                String TARGET_FILE = "/opt/tomcat/webapps/archivospropuesta/" + proposal.getCode();
                 File fileToMove = new File(TARGET_FILE);
                 fileToMove.renameTo(new File(url));
-                reqData.setFolder("/home/wilmar/projectsMariana/archivosPropuestas/" + reqData.getCode());
+                //reqData.setFolder("/home/wilmar/projectsMariana/archivosPropuestas/" + reqData.getCode());
+                reqData.setFolder("/opt/tomcat/webapps/archivospropuesta/" + reqData.getCode());
                 reqData.setCode(reqData.getCode());
             }
         }
@@ -232,22 +305,7 @@ public class ProposalController {
         }
     }
     
-        
-    @PostMapping("version")
-    public ResponseEntity<?> createProposalVersion(@RequestBody ProposalVersion reqData) throws IOException{
-        System.out.println(":::  UserController.createUser :::" + reqData.getVersion());
-        ResultDTO<?> responsePacket = null;
-       
-            try {
-             responsePacket = new ResultDTO<>(proposalVersionservice.createProposal(reqData), 
-                     "Proposal Created Successfully", true);  
-            return new ResponseEntity<>(responsePacket, HttpStatus.OK);
-            } catch (Exception e) {
-            System.out.print("entra en catchh");
-            responsePacket = new ResultDTO<>(e.getMessage(), false);
-            return new ResponseEntity<>(responsePacket, HttpStatus.BAD_REQUEST);
-        }
-    }
+   
         
     @PutMapping
     public Proposal  updateProposal(@RequestBody Proposal reqData){
@@ -259,12 +317,13 @@ public class ProposalController {
     
     
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<?> delete(@PathVariable(value = "id") Long id ) {
         System.out.println("delete");
         ResultDTO<?> responsePacket = null;
         try {
-            proposalVersionservice.getProposalsById(id);
-            responsePacket = new ResultDTO<>(proposalservice , 
+       
+            //proposalVersionservice.getProposalsById(id);
+            responsePacket = new ResultDTO<>(  proposalservice.delete(id), 
                     "proposal deleted successfully !!", true);
             return new ResponseEntity<>(responsePacket, HttpStatus.OK);
         } catch (Exception e) {

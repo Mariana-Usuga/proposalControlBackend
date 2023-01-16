@@ -17,4 +17,8 @@ public class HitoService {
         return  hitorepo.save(hito);
     }
     
+       /* public Hito delete(Long id){
+        hitorepo.deleteByIdProposal(id);
+        return null;
+    }*/
 }
